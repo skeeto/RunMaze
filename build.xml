@@ -20,7 +20,7 @@
     </jar>
   </target>
 
-  <target name="run">
+  <target name="run" depends="jar">
     <java jar="RunMaze.jar" fork="true"/>
   </target>
   

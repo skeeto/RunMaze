@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 
 /* RunMaze - Contains the main function that drives the program. */
 public class RunMaze {
@@ -42,6 +43,12 @@ public class RunMaze {
 
         /* Finally make everything visible */
         mazeFrame.setVisible(true);
+
+        mazeFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(0);
+            }
+        });
 
         /* Now solve the maze */
         MazeSolve solution = new MazeSolve(newMaze, mazeDraw, speed);

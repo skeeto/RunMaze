@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project name="RunMaze" default="jar" basedir=".">
+  
+  <property name="src" value="src" />
+  <property name="build" value="build" />
+
+  <target name="init">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src}" destdir="${build}" />
+  </target>
+  
+  <target name="jar" depends="compile">
+    <jar destfile="RunMaze.jar" basedir="build">
+      <manifest>
+        <attribute name="Main-Class" value="RunMaze"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run">
+    <java jar="RunMaze.jar" fork="true"/>
+  </target>
+  
+  <target name="clean">
+    <delete dir="build" />
+    <delete file="RunMaze.jar" />
+  </target>
+
+</project>

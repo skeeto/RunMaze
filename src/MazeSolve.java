@@ -10,7 +10,7 @@ class MazeSolve implements Runnable {
     private int         sleepTime;
 
     /* Solution variables */
-    private Stack       solveStack = new Stack();
+    private Stack<OrderedPair> solveStack = new Stack<OrderedPair>();
     private OrderedPair mazeEnd;
 
     public MazeSolve(Maze newMaze, MazeDisplay newDisplay, int sleep) {
@@ -35,7 +35,7 @@ class MazeSolve implements Runnable {
 
         /* Solve one step of the maze, sleep, check for halt, repeat */
         do {
-            point = (OrderedPair) solveStack.peek();
+            point = solveStack.peek();
 
             /* Mark the current point location */
             thisMaze.mark(point);

@@ -26,9 +26,9 @@ class Maze {
 
     /* Generates the maze. */
     private void generate() {
-        Stack       genStack  = new Stack();
+        Stack<OrderedPair>  genStack  = new Stack<OrderedPair>();
+        Vector<OrderedPair> freeCells = new Vector<OrderedPair>();
         OrderedPair point;
-        Vector      freeCells = new Vector();
         Random      randomGen = new Random();
         OrderedPair nextCell;
         int         nextCellIndex;
@@ -37,7 +37,7 @@ class Maze {
         genStack.push(new OrderedPair(0, 0));
 
         while (!genStack.empty()) {
-            point = (OrderedPair) genStack.peek();
+            point = genStack.peek();
 
             OrderedPair upCell    = new OrderedPair(point.x, point.y - 1);
             OrderedPair downCell  = new OrderedPair(point.x, point.y + 1);
@@ -64,7 +64,7 @@ class Maze {
                 genStack.pop();
             } else {
                 nextCellIndex = randomGen.nextInt(freeCells.size());
-                nextCell = (OrderedPair) freeCells.elementAt(nextCellIndex);
+                nextCell = freeCells.elementAt(nextCellIndex);
 
                 /* Mark as used. */
                 markCellUsed(nextCell);

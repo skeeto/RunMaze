@@ -2,6 +2,8 @@ import java.awt.*;
 
 /* Contains the actual maze drawing */
 class MazeDisplay extends Canvas {
+    private static final long serialVersionUID = 1L;
+
     private Maze thisMaze;
     private int unitSize;
 

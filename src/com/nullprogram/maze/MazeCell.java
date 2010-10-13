@@ -1,3 +1,5 @@
+package com.nullprogram.maze;
+
 /* MazeCell - a single maze cell. Each cell has a top wall and a left
    wall and a marker indicating if the cell is part of the final maze
    yet (or not). */

@@ -1,3 +1,5 @@
+package com.nullprogram.maze;
+
 import java.util.Stack;
 import java.util.Vector;
 import java.util.Random;

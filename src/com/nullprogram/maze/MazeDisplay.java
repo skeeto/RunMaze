@@ -1,3 +1,5 @@
+package com.nullprogram.maze;
+
 import java.awt.*;
 
 /* Contains the actual maze drawing */

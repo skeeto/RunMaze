@@ -1,3 +1,5 @@
+package com.nullprogram.maze;
+
 import java.awt.*;
 import java.awt.event.*;
 

@@ -1,3 +1,5 @@
+package com.nullprogram.maze;
+
 import java.util.Stack;
 
 /* MazeSolve - solves the given maze and updates it on the given

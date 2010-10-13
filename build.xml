@@ -17,7 +17,7 @@
   <target name="jar" depends="compile">
     <jar destfile="${jar}" basedir="${build}">
       <manifest>
-        <attribute name="Main-Class" value="RunMaze"/>
+        <attribute name="Main-Class" value="com.nullprogram.maze.RunMaze"/>
       </manifest>
     </jar>
   </target>

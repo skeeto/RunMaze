@@ -93,7 +93,8 @@ class Maze {
        "used" state if it is. */
     private boolean cellUsed(OrderedPair point) {
         if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth) || (point.y >= this.mazeHeight)) {
+                || (point.x >= this.mazeWidth)
+                || (point.y >= this.mazeHeight)) {
             return true;
         } else {
             return mazeData[point.x][point.y].used;
@@ -123,7 +124,8 @@ class Maze {
     /* Returns true if the cell is marked as any type fo path */
     public boolean marked(OrderedPair point) {
         if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth) || (point.y >= this.mazeHeight)) {
+                || (point.x >= this.mazeWidth)
+                || (point.y >= this.mazeHeight)) {
             return true;
         } else {
             return mazeData[point.x][point.y].solveMark
@@ -139,7 +141,8 @@ class Maze {
     /* Returns true if cell has a top wall */
     public boolean topWall(OrderedPair point) {
         if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth) || (point.y >= this.mazeHeight)) {
+                || (point.x >= this.mazeWidth)
+                || (point.y >= this.mazeHeight)) {
             return true;
         } else {
             return mazeData[point.x][point.y].top;
@@ -149,7 +152,8 @@ class Maze {
     /* Returns true if cell has a bottom wall */
     public boolean leftWall(OrderedPair point) {
         if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth) || (point.y >= this.mazeHeight)) {
+                || (point.x >= this.mazeWidth)
+                || (point.y >= this.mazeHeight)) {
             return true;
         } else {
             return mazeData[point.x][point.y].left;

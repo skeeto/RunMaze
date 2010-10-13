@@ -1,7 +1,6 @@
 package com.nullprogram.maze;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JFrame;
 
 /* RunMaze - Contains the main function that drives the program. */
 public class RunMaze {
@@ -36,21 +35,13 @@ public class RunMaze {
         Maze newMaze = new Maze(width, height);
 
         /* Create a frame and a maze display */
-        Frame mazeFrame = new Frame("Maze");
+        JFrame mazeFrame = new JFrame("Maze");
         MazeDisplay mazeDraw = new MazeDisplay(newMaze, unitSize);
+        mazeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mazeFrame.add(mazeDraw);
-
-        /* Adjust the size of the frame */
-        mazeFrame.setSize(width*unitSize+12, height*unitSize+30);
-
-        /* Finally make everything visible */
+        mazeFrame.pack();
+        mazeFrame.setResizable(false);
         mazeFrame.setVisible(true);
-
-        mazeFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent we) {
-                System.exit(0);
-            }
-        });
 
         /* Now solve the maze */
         MazeSolve solution = new MazeSolve(newMaze, mazeDraw, speed);

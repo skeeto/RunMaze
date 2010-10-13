@@ -1,25 +1,35 @@
 package com.nullprogram.maze;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Dimension;
+
+import javax.swing.JPanel;
 
 /* Contains the actual maze drawing */
-class MazeDisplay extends Canvas {
+class MazeDisplay extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private Maze thisMaze;
     private int unitSize;
 
+    private int width;
+    private int height;
+
     public MazeDisplay(Maze newMaze, int unitSize) {
         super();
-        this.setSize(newMaze.mazeWidth*unitSize, newMaze.mazeHeight*unitSize);
-        thisMaze = newMaze;
         this.unitSize = unitSize;
+        thisMaze = newMaze;
+        width  = thisMaze.mazeWidth*unitSize;
+        height = thisMaze.mazeHeight*unitSize;
+        Dimension size = new Dimension(width, height);
+        setMinimumSize(size);
+        setPreferredSize(size);
     }
 
     /* Draws the maze */
-    public void paint(Graphics g) {
-        int width  = thisMaze.mazeWidth*unitSize;
-        int height = thisMaze.mazeHeight*unitSize;
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         g.drawLine(0,height,width,height);
         g.drawLine(width,0,width,height);
         for (int i = 0; i < thisMaze.mazeWidth; i++) {

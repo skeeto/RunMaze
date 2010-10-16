@@ -41,7 +41,7 @@ class MazeSolve implements Runnable {
 
             /* Mark the current point location */
             thisMaze.mark(point);
-            thisDisplay.mark(point);
+            thisDisplay.repaint();
 
             /* Decide which directon to go next */
             OrderedPair upCell    = new OrderedPair(point.x, point.y - 1);
@@ -63,7 +63,7 @@ class MazeSolve implements Runnable {
                 solveStack.push(leftCell);
             } else {
                 thisMaze.markError(point);
-                thisDisplay.markError(point);
+                thisDisplay.repaint();
                 solveStack.pop();
             }
 

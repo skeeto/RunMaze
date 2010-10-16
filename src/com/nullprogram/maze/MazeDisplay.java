@@ -39,18 +39,6 @@ class MazeDisplay extends JPanel {
         }
     }
 
-    /* Simply calls for a single cell to e redrawn */
-    public void mark(OrderedPair point) {
-        Graphics g = this.getGraphics();
-        drawCell(point, g);
-    }
-
-    /* Simply calls for a single cell to e redrawn */
-    public void markError(OrderedPair point) {
-        Graphics g = this.getGraphics();
-        drawCell(point, g);
-    }
-
     /* Fills a cell with the current color */
     private void fillCell(OrderedPair point, Graphics g) {
         g.fillRect(point.x * unitSize,

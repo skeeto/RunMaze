@@ -1,6 +1,7 @@
 package com.nullprogram.maze;
 
 import java.util.Stack;
+import java.util.ArrayList;
 
 /* MazeSolve - solves the given maze and updates it on the given
    display. */
@@ -12,6 +13,7 @@ class MazeSolve implements Runnable {
     private int         sleepTime;
 
     private volatile boolean enabled;
+    private ArrayList<SolveListener> listeners;
 
     /* Solution variables */
     private Stack<OrderedPair> solveStack = new Stack<OrderedPair>();
@@ -24,6 +26,7 @@ class MazeSolve implements Runnable {
         mazeEnd = new OrderedPair(thisMaze.mazeWidth - 1,
                                   thisMaze.mazeHeight - 1);
         solveStack.push(new OrderedPair(0,0));
+        listeners = new ArrayList<SolveListener>();
         start();
     }
 
@@ -85,5 +88,16 @@ class MazeSolve implements Runnable {
 
             /* If next point location is the end, we are done. */
         } while (enabled && !point.equals(mazeEnd));
+
+        if (point.equals(mazeEnd)) {
+            for (SolveListener listener : listeners) {
+                listener.solveDone();
+            }
+        }
+    }
+
+    /* Add a new listener. */
+    public void addListener(SolveListener listener) {
+        listeners.add(listener);
     }
 }

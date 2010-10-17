@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.JApplet;
 
-public class MazeApplet extends JApplet {
+public class MazeApplet extends JApplet implements SolveListener {
 
     private static final long serialVersionUID = 7742407602430714892L;
 
@@ -18,9 +18,14 @@ public class MazeApplet extends JApplet {
         Dimension size = getSize();
         maze = new Maze((int) (size.getWidth() / cellSize),
                         (int) (size.getHeight() / cellSize));
-        display = new MazeDisplay(maze, cellSize);
-        add(display);
+        if (display == null) {
+            display = new MazeDisplay(maze, cellSize);
+            add(display);
+        } else {
+            display.setMaze(maze);
+        }
         solution = new MazeSolve(maze, display, speed);
+        solution.addListener(this);
     }
 
     public void start() {
@@ -33,5 +38,14 @@ public class MazeApplet extends JApplet {
 
     public void destroy() {
         stop();
+    }
+
+    public void solveDone() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            return;
+        }
+        init();
     }
 }

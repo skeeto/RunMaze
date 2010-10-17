@@ -16,4 +16,15 @@ class OrderedPair {
     public void paint() {
         System.out.println("(" + this.x + "," + this.y + ")");
     }
+
+    /* Determine if two OrderedPair are equal. */
+    public boolean equals(Object o) {
+        if (o instanceof OrderedPair) {
+            OrderedPair that = (OrderedPair) o;
+            if ((this.x == that.x) && (this.y == that.y)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

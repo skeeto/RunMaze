@@ -84,6 +84,6 @@ class MazeSolve implements Runnable {
             }
 
             /* If next point location is the end, we are done. */
-        } while (enabled && (point.x != mazeEnd.x || point.y != mazeEnd.y));
+        } while (enabled && !point.equals(mazeEnd));
     }
 }

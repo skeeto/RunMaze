@@ -15,6 +15,10 @@ public class MazeApplet extends JApplet implements SolveListener {
     private MazeSolve solution;
 
     public void init() {
+        String paramSize = getParameter("cellsize");
+        if (paramSize != null) {
+            cellSize = Integer.parseInt(paramSize);
+        }
         Dimension size = getSize();
         maze = new Maze((int) (size.getWidth() / cellSize),
                         (int) (size.getHeight() / cellSize));

@@ -22,4 +22,16 @@ public class MazeApplet extends JApplet {
         add(display);
         solution = new MazeSolve(maze, display, speed);
     }
+
+    public void start() {
+        solution.start();
+    }
+
+    public void stop() {
+        solution.stop();
+    }
+
+    public void destroy() {
+        stop();
+    }
 }

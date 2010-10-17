@@ -11,6 +11,8 @@ class MazeSolve implements Runnable {
     private Thread      solveThread;
     private int         sleepTime;
 
+    private volatile boolean enabled;
+
     /* Solution variables */
     private Stack<OrderedPair> solveStack = new Stack<OrderedPair>();
     private OrderedPair mazeEnd;
@@ -18,17 +20,24 @@ class MazeSolve implements Runnable {
     public MazeSolve(Maze newMaze, MazeDisplay newDisplay, int sleep) {
         thisMaze   = newMaze;
         thisDisplay = newDisplay;
+        sleepTime = sleep;
         mazeEnd = new OrderedPair(thisMaze.mazeWidth - 1,
                                   thisMaze.mazeHeight - 1);
-
-        solveThread = new Thread(this);
-        sleepTime = sleep;
-
-        /* Push on the starting location */
         solveStack.push(new OrderedPair(0,0));
+        start();
+    }
 
-        /* Start the solving thread */
-        solveThread.start();
+    /* Start the solver thread. */
+    public void start() {
+        if (enabled == false) {
+            enabled = true;
+            (new Thread(this)).start();
+        }
+    }
+
+    /* Stop the solver thread. */
+    public void stop() {
+        enabled = false;
     }
 
     /* Solves the maze in its own thread */
@@ -75,6 +84,6 @@ class MazeSolve implements Runnable {
             }
 
             /* If next point location is the end, we are done. */
-        } while (point.x != mazeEnd.x || point.y != mazeEnd.y);
+        } while (enabled && (point.x != mazeEnd.x || point.y != mazeEnd.y));
     }
 }

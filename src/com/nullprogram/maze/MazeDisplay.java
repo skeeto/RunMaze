@@ -77,4 +77,9 @@ class MazeDisplay extends JPanel {
                        j*unitSize);
         }
     }
+
+    /* Assign this display a new maze. */
+    public void setMaze(Maze maze) {
+        thisMaze = maze;
+    }
 }

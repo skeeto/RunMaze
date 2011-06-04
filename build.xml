@@ -10,7 +10,8 @@
   </target>
 
   <target name="compile" depends="init">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" debug="on">
+    <javac srcdir="${src.dir}" destdir="${build.dir}" debug="on"
+           includeantruntime="false">
       <compilerarg value="-Xlint"/>
     </javac>
   </target>

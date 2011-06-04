@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 /* RunMaze - Contains the main function that drives the program. */
 public class RunMaze {
     public static void main(String args[]) {
+        /* Fix for poor OpenJDK performance. */
+        System.setProperty("sun.java2d.pmoffscreen", "false");
 
         /* Default maze behaviour */
         int width    = 60;

@@ -57,4 +57,10 @@
       <arg value="${dist.dir}/index.html"/>
     </exec>
   </target>
+
+  <target name="javadoc" description="Generate Javadoc HTML.">
+    <javadoc destdir="${dist.dir}/javadoc">
+      <fileset dir="${src.dir}" includes="**/*.java" />
+    </javadoc>
+  </target>
 </project>

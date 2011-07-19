@@ -1,0 +1,10 @@
+This is a simple animated maze generator and solver I initially wrote
+years ago when I was learning Java.
+
+I've revisited it over the years, adding improvements as I learn more
+about Java. It was intially unversioned, then checked into Subversion,
+and, without converting with git-svn, then Git. So most of its history
+is lost.
+
+Checkstyle is a partial build dependency. You should be able to build
+without it, only with complaints from Ant.

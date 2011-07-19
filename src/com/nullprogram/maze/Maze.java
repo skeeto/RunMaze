@@ -103,7 +103,7 @@ public class Maze {
      * @return true if cell has been visited
      */
     private boolean cellUsed(final OrderedPair point) {
-        return !inBounds(point) || data[point.x][point.y].used;
+        return !inBounds(point) || data[point.x][point.y].isUsed();
     }
 
     /**
@@ -111,7 +111,7 @@ public class Maze {
      * @param point position to be marked
      */
     private void markCellUsed(final OrderedPair point) {
-        data[point.x][point.y].used = true;
+        data[point.x][point.y].markUsed();
     }
 
     /**
@@ -119,7 +119,7 @@ public class Maze {
      * @param point the position to be affected
      */
     private void breakLeft(final OrderedPair point) {
-        data[point.x][point.y].left = false;
+        data[point.x][point.y].breakLeft();
     }
 
     /**
@@ -127,7 +127,7 @@ public class Maze {
      * @param point the position to be affected
      */
     private void breakTop(final OrderedPair point) {
-        data[point.x][point.y].top = false;
+        data[point.x][point.y].breakTop();
     }
 
     /**
@@ -135,7 +135,7 @@ public class Maze {
      * @param point the position to be marked
      */
     public final void markSolution(final OrderedPair point) {
-        data[point.x][point.y].solveMark = true;
+        data[point.x][point.y].markSolution();
     }
 
     /**
@@ -145,7 +145,7 @@ public class Maze {
      * @return true of the position has been marked
      */
     public final boolean isSolution(final OrderedPair point) {
-        return inBounds(point) && data[point.x][point.y].solveMark;
+        return inBounds(point) && data[point.x][point.y].isSolution();
     }
 
     /**
@@ -153,7 +153,7 @@ public class Maze {
      * @param point the position to be marked
      */
     public final void markError(final OrderedPair point) {
-        data[point.x][point.y].solveError = true;
+        data[point.x][point.y].markError();
     }
 
     /**
@@ -163,7 +163,7 @@ public class Maze {
      * @return true of the position has been marked
      */
     public final boolean isError(final OrderedPair point) {
-        return !inBounds(point) || data[point.x][point.y].solveError;
+        return !inBounds(point) || data[point.x][point.y].isError();
     }
 
     /**
@@ -173,8 +173,8 @@ public class Maze {
      */
     public final boolean marked(final OrderedPair point) {
         return !inBounds(point)
-            || data[point.x][point.y].solveMark
-            || data[point.x][point.y].solveError;
+            || data[point.x][point.y].isSolution()
+            || data[point.x][point.y].isError();
     }
 
     /**
@@ -183,7 +183,7 @@ public class Maze {
      * @return true if the position has a top wall
      */
     public final boolean topWall(final OrderedPair point) {
-        return !inBounds(point) || data[point.x][point.y].top;
+        return !inBounds(point) || data[point.x][point.y].hasTopWall();
     }
 
     /**
@@ -192,7 +192,7 @@ public class Maze {
      * @return true if the position has a top wall
      */
     public final boolean leftWall(final OrderedPair point) {
-        return !inBounds(point) || data[point.x][point.y].left;
+        return !inBounds(point) || data[point.x][point.y].hasLeftWall();
     }
 
     /**

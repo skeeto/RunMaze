@@ -1,6 +1,8 @@
 package com.nullprogram.maze;
 
-/* For when something needs to know the solver is done. */
+/**
+ * Interface for subscribing to solver events.
+ */
 public interface SolverListener {
 
     /**

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 /**
  * Displays a maze to the user as a GUI component.
  */
-class MazeDisplay extends JPanel {
+class MazeDisplay extends JPanel implements SolverListener {
     private static final long serialVersionUID = 1L;
 
     /* Color scheme. */
@@ -95,6 +95,16 @@ class MazeDisplay extends JPanel {
         Dimension size = new Dimension(width, height);
         setMinimumSize(size);
         setPreferredSize(size);
+        repaint();
+    }
+
+    @Override
+    public final void solveDone() {
+        repaint();
+    }
+
+    @Override
+    public final void solveStep() {
         repaint();
     }
 }

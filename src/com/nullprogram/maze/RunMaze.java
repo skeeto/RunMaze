@@ -46,6 +46,7 @@ public class RunMaze {
         mazeFrame.setVisible(true);
 
         /* Now solve the maze */
-        MazeSolve solution = new MazeSolve(newMaze, mazeDraw, speed);
+        MazeSolver solution = new MazeSolver(newMaze, speed);
+        solution.addListener(mazeDraw);
     }
 }

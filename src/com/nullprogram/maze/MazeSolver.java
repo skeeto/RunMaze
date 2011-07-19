@@ -1,49 +1,58 @@
 package com.nullprogram.maze;
 
-import java.util.Stack;
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-/* MazeSolve - solves the given maze and updates it on the given
-   display. */
-class MazeSolve implements Runnable {
-    /* Behavior variables */
-    private Maze        maze;
-    private MazeDisplay thisDisplay;
-    private Thread      solveThread;
-    private int         sleepTime;
+/**
+ * Solves a maze asynchronously at a leisurely pace.
+ */
+class MazeSolver implements Runnable {
+
+    private final Maze maze;
+    private final int sleepTime;
 
     private volatile boolean enabled;
-    private ArrayList<SolveListener> listeners;
+    private Collection<SolverListener> listeners
+        = new CopyOnWriteArrayList<SolverListener>();
 
     /* Solution variables */
-    private Stack<OrderedPair> solveStack = new Stack<OrderedPair>();
+    private Deque<OrderedPair> solveStack = new ArrayDeque<OrderedPair>();
     private OrderedPair mazeEnd;
 
-    public MazeSolve(Maze puzzle, MazeDisplay newDisplay, int sleep) {
+    /**
+     * Creates a new solver for the given maze.
+     * @param puzzle  the maze to be solved
+     * @param sleep  amount of time to sleep between steps
+     */
+    public MazeSolver(final Maze puzzle, final int sleep) {
         maze = puzzle;
-        thisDisplay = newDisplay;
         sleepTime = sleep;
         mazeEnd = new OrderedPair(maze.getWidth() - 1,
                                   maze.getHeight() - 1);
-        solveStack.push(new OrderedPair(0,0));
-        listeners = new ArrayList<SolveListener>();
+        solveStack.push(new OrderedPair(0, 0));
         start();
     }
 
-    /* Start the solver thread. */
+    /**
+     * Start the solver thread.
+     */
     public void start() {
-        if (enabled == false) {
+        if (!enabled) {
             enabled = true;
             (new Thread(this)).start();
         }
     }
 
-    /* Stop the solver thread. */
+    /**
+     * Pause the solution thread.
+     */
     public void stop() {
         enabled = false;
     }
 
-    /* Solves the maze in its own thread */
+    @Override
     public void run() {
         OrderedPair point;
 
@@ -53,7 +62,6 @@ class MazeSolve implements Runnable {
 
             /* Mark the current point location */
             maze.markSolution(point);
-            thisDisplay.repaint();
 
             /* Decide which directon to go next */
             OrderedPair upCell    = new OrderedPair(point.x, point.y - 1);
@@ -75,8 +83,11 @@ class MazeSolve implements Runnable {
                 solveStack.push(leftCell);
             } else {
                 maze.markError(point);
-                thisDisplay.repaint();
                 solveStack.pop();
+            }
+
+            for (SolverListener listener : listeners) {
+                listener.solveStep();
             }
 
             /* Wait for some time time */
@@ -90,14 +101,17 @@ class MazeSolve implements Runnable {
         } while (enabled && !point.equals(mazeEnd));
 
         if (point.equals(mazeEnd)) {
-            for (SolveListener listener : listeners) {
+            for (SolverListener listener : listeners) {
                 listener.solveDone();
             }
         }
     }
 
-    /* Add a new listener. */
-    public void addListener(SolveListener listener) {
+    /**
+     * Subscribe a new SolverListener to this solver.
+     * @param listener  the new subscriber
+     */
+    public final void addListener(final SolverListener listener) {
         listeners.add(listener);
     }
 }

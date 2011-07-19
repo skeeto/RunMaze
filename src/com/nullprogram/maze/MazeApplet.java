@@ -7,7 +7,7 @@ import javax.swing.JApplet;
 /**
  * Runs the maze animation as an applet.
  */
-public class MazeApplet extends JApplet implements SolveListener {
+public class MazeApplet extends JApplet implements SolverListener {
 
     private static final long serialVersionUID = 7742407602430714892L;
 
@@ -20,7 +20,7 @@ public class MazeApplet extends JApplet implements SolveListener {
     private int speed = SPEED;
     private Maze maze;
     private MazeDisplay display;
-    private MazeSolve solution;
+    private MazeSolver solution;
 
     @Override
     public final void init() {
@@ -37,8 +37,9 @@ public class MazeApplet extends JApplet implements SolveListener {
         } else {
             display.setMaze(maze);
         }
-        solution = new MazeSolve(maze, display, speed);
+        solution = new MazeSolver(maze, speed);
         solution.addListener(this);
+        solution.addListener(display);
     }
 
     @Override
@@ -64,5 +65,9 @@ public class MazeApplet extends JApplet implements SolveListener {
             return;
         }
         init();
+    }
+
+    @Override
+    public final void solveStep() {
     }
 }

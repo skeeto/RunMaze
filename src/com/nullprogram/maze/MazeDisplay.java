@@ -10,21 +10,16 @@ import javax.swing.JPanel;
 class MazeDisplay extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private Maze thisMaze;
+    private Maze maze;
     private int unitSize;
 
     private int width;
     private int height;
 
-    public MazeDisplay(Maze newMaze, int unitSize) {
+    public MazeDisplay(Maze view, int unitSize) {
         super();
         this.unitSize = unitSize;
-        thisMaze = newMaze;
-        width  = thisMaze.mazeWidth*unitSize;
-        height = thisMaze.mazeHeight*unitSize;
-        Dimension size = new Dimension(width, height);
-        setMinimumSize(size);
-        setPreferredSize(size);
+        setMaze(view);
     }
 
     /* Draws the maze */
@@ -32,8 +27,8 @@ class MazeDisplay extends JPanel {
         super.paintComponent(g);
         g.drawLine(0,height,width,height);
         g.drawLine(width,0,width,height);
-        for (int i = 0; i < thisMaze.mazeWidth; i++) {
-            for (int j = 0; j < thisMaze.mazeHeight; j++) {
+        for (int i = 0; i < maze.getWidth(); i++) {
+            for (int j = 0; j < maze.getHeight(); j++) {
                 drawCell(new OrderedPair(i, j), g);
             }
         }
@@ -49,37 +44,39 @@ class MazeDisplay extends JPanel {
 
     /* Draws the cell according to its state information */
     private void drawCell(OrderedPair point, Graphics g) {
-        int i = point.x;
-        int j = point.y;
-
-        if (thisMaze.mazeData[i][j].solveMark) {
-            g.setColor(new Color(0, 255, 0)); // Green (solution)
+        if (maze.isSolution(point)) {
+            g.setColor(new Color(0, 255, 0));
+            fillCell(point, g);
+        }
+        if (maze.isError(point)) {
+            g.setColor(new Color(255, 127, 127));
             fillCell(point, g);
         }
 
-        if (thisMaze.mazeData[i][j].solveError) {
-            g.setColor(new Color(255, 127, 127)); // Light red (error)
-            fillCell(point, g);
+        int x = point.x;
+        int y = point.y;
+        g.setColor(new Color(0, 0, 0));
+        if (maze.leftWall(point)) {
+            g.drawLine(x*unitSize,
+                       y*unitSize,
+                       x*unitSize,
+                       (y+1)*unitSize);
         }
-
-        g.setColor(new Color(0, 0, 0));	// Black walls
-
-        if (thisMaze.mazeData[i][j].left) {
-            g.drawLine(i*unitSize,
-                       j*unitSize,
-                       i*unitSize,
-                       (j+1)*unitSize);
-        }
-        if (thisMaze.mazeData[i][j].top) {
-            g.drawLine(i*unitSize,
-                       j*unitSize,
-                       (i+1)*unitSize,
-                       j*unitSize);
+        if (maze.topWall(point)) {
+            g.drawLine(x*unitSize,
+                       y*unitSize,
+                       (x+1)*unitSize,
+                       y*unitSize);
         }
     }
 
     /* Assign this display a new maze. */
-    public void setMaze(Maze maze) {
-        thisMaze = maze;
+    public void setMaze(Maze view) {
+        maze = view;
+        width = maze.getWidth() * unitSize;
+        height = maze.getHeight() * unitSize;
+        Dimension size = new Dimension(width, height);
+        setMinimumSize(size);
+        setPreferredSize(size);
     }
 }

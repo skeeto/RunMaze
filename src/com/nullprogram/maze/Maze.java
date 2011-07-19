@@ -4,29 +4,36 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.Random;
 
-/* Maze - Generates and stores a maze. */
-class Maze {
-    public int mazeWidth;
-    public int mazeHeight;
-    public MazeCell[][] mazeData = null;
+/**
+ * A single randomly-generated maze. The maze is generated at
+ * construction time.
+ */
+public class Maze {
 
-    public Maze(int width, int height) {
-        this.mazeWidth = width;
-        this.mazeHeight = height;
+    private final int width;
+    private final int height;
+    private final MazeCell[][] data;
 
-        /* Initialize the array */
-        mazeData = new MazeCell[width][height];
+    /**
+     * Generate a new maze with the given properties.
+     * @param mazeWidth   width of the new maze
+     * @param mazeHeight  height of the new maze
+     */
+    public Maze(final int mazeWidth, final int mazeHeight) {
+        width = mazeWidth;
+        height = mazeHeight;
+        data = new MazeCell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                mazeData[i][j] = new MazeCell();
+                data[i][j] = new MazeCell();
             }
         }
-
-        /* Generate the maze */
-        this.generate();
+        generate();
     }
 
-    /* Generates the maze. */
+    /**
+     * Generate this maze. This should only be called once.
+     */
     private void generate() {
         Stack<OrderedPair>  genStack  = new Stack<OrderedPair>();
         Vector<OrderedPair> freeCells = new Vector<OrderedPair>();
@@ -89,74 +96,129 @@ class Maze {
         }
     }
 
-    /* Checks to make sure the query is in the maze. Returns the cell
-       "used" state if it is. */
-    private boolean cellUsed(OrderedPair point) {
-        if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth)
-                || (point.y >= this.mazeHeight)) {
-            return true;
-        } else {
-            return mazeData[point.x][point.y].used;
-        }
+    /**
+     * Determine if the given cell has been visited already. Positions
+     * outside the bounds are considered visited.
+     * @param point  the point to be tested
+     * @return true if cell has been visited
+     */
+    private boolean cellUsed(final OrderedPair point) {
+        return !inBounds(point) || data[point.x][point.y].used;
     }
 
-    /* Marks a cell's "used" state as true */
-    private void markCellUsed(OrderedPair point) {
-        mazeData[point.x][point.y].used = true;
+    /**
+     * Mark the given position as visited.
+     * @param point position to be marked
+     */
+    private void markCellUsed(final OrderedPair point) {
+        data[point.x][point.y].used = true;
     }
 
-    /* Removes the left cell wall*/
-    private void breakLeft(OrderedPair point) {
-        mazeData[point.x][point.y].left = false;
+    /**
+     * Break down the left wall at the position.
+     * @param point the position to be affected
+     */
+    private void breakLeft(final OrderedPair point) {
+        data[point.x][point.y].left = false;
     }
 
-    /* Remove the top cell wall */
-    private void breakTop(OrderedPair point) {
-        mazeData[point.x][point.y].top = false;
+    /**
+     * Break down the top wall at the position.
+     * @param point the position to be affected
+     */
+    private void breakTop(final OrderedPair point) {
+        data[point.x][point.y].top = false;
     }
 
-    /* Marks the cell as a solution path */
-    public void mark(OrderedPair point) {
-        mazeData[point.x][point.y].solveMark = true;
+    /**
+     * Marks the given position as a solution path.
+     * @param point the position to be marked
+     */
+    public final void markSolution(final OrderedPair point) {
+        data[point.x][point.y].solveMark = true;
     }
 
-    /* Returns true if the cell is marked as any type fo path */
-    public boolean marked(OrderedPair point) {
-        if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth)
-                || (point.y >= this.mazeHeight)) {
-            return true;
-        } else {
-            return mazeData[point.x][point.y].solveMark
-                   || mazeData[point.x][point.y].solveError;
-        }
+    /**
+     * Determines id maze position has been marked as a
+     * solution. Positions outside the bounds are counted as not marked.
+     * @param point the position to be tested
+     * @return true of the position has been marked
+     */
+    public final boolean isSolution(final OrderedPair point) {
+        return inBounds(point) && data[point.x][point.y].solveMark;
     }
 
-    /* Marks the cell as part of an error path */
-    public void markError(OrderedPair point) {
-        mazeData[point.x][point.y].solveError = true;
+    /**
+     * Marks the given position as part of an error path.
+     * @param point the position to be marked
+     */
+    public final void markError(final OrderedPair point) {
+        data[point.x][point.y].solveError = true;
     }
 
-    /* Returns true if cell has a top wall */
-    public boolean topWall(OrderedPair point) {
-        if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth)
-                || (point.y >= this.mazeHeight)) {
-            return true;
-        } else {
-            return mazeData[point.x][point.y].top;
-        }
+    /**
+     * Determines id maze position has been marked as an
+     * errer. Positions outside the bounds are counted as not marked.
+     * @param point the position to be tested
+     * @return true of the position has been marked
+     */
+    public final boolean isError(final OrderedPair point) {
+        return !inBounds(point) || data[point.x][point.y].solveError;
     }
 
-    /* Returns true if cell has a bottom wall */
-    public boolean leftWall(OrderedPair point) {
-        if ((point.x < 0) || (point.y < 0)
-                || (point.x >= this.mazeWidth)
-                || (point.y >= this.mazeHeight)) {
-            return true;
-        } else {
-            return mazeData[point.x][point.y].left;
-        }
+    /**
+     * Return true if position has any marking.
+     * @param point the position to be tested
+     * @return true if position has any mark
+     */
+    public final boolean marked(final OrderedPair point) {
+        return !inBounds(point)
+            || data[point.x][point.y].solveMark
+            || data[point.x][point.y].solveError;
+    }
+
+    /**
+     * Returns true if position has a top wall.
+     * @param point the position to be tested
+     * @return true if the position has a top wall
+     */
+    public final boolean topWall(final OrderedPair point) {
+        return !inBounds(point) || data[point.x][point.y].top;
+    }
+
+    /**
+     * Returns true if position has a top wall.
+     * @param point the position to be tested
+     * @return true if the position has a top wall
+     */
+    public final boolean leftWall(final OrderedPair point) {
+        return !inBounds(point) || data[point.x][point.y].left;
+    }
+
+    /**
+     * Return true if the given position is within the bounds of the
+     * maze.
+     * @param point the point to be tested
+     * @return true if position is within the bounds of the maze
+     */
+    private boolean inBounds(final OrderedPair point) {
+        return (point.x >= 0) && (point.y >= 0)
+            && (point.x < width) && (point.y < height);
+    }
+
+    /**
+     * Return the width of the maze.
+     * @return the width of the maze
+     */
+    public final int getWidth() {
+        return width;
+    }
+
+    /**
+     * Return the height of the maze.
+     * @return the height of the maze
+     */
+    public final int getHeight() {
+        return height;
     }
 }

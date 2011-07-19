@@ -7,7 +7,7 @@ import java.util.ArrayList;
    display. */
 class MazeSolve implements Runnable {
     /* Behavior variables */
-    private Maze        thisMaze;
+    private Maze        maze;
     private MazeDisplay thisDisplay;
     private Thread      solveThread;
     private int         sleepTime;
@@ -19,12 +19,12 @@ class MazeSolve implements Runnable {
     private Stack<OrderedPair> solveStack = new Stack<OrderedPair>();
     private OrderedPair mazeEnd;
 
-    public MazeSolve(Maze newMaze, MazeDisplay newDisplay, int sleep) {
-        thisMaze   = newMaze;
+    public MazeSolve(Maze puzzle, MazeDisplay newDisplay, int sleep) {
+        maze = puzzle;
         thisDisplay = newDisplay;
         sleepTime = sleep;
-        mazeEnd = new OrderedPair(thisMaze.mazeWidth - 1,
-                                  thisMaze.mazeHeight - 1);
+        mazeEnd = new OrderedPair(maze.getWidth() - 1,
+                                  maze.getHeight() - 1);
         solveStack.push(new OrderedPair(0,0));
         listeners = new ArrayList<SolveListener>();
         start();
@@ -52,7 +52,7 @@ class MazeSolve implements Runnable {
             point = solveStack.peek();
 
             /* Mark the current point location */
-            thisMaze.mark(point);
+            maze.markSolution(point);
             thisDisplay.repaint();
 
             /* Decide which directon to go next */
@@ -62,19 +62,19 @@ class MazeSolve implements Runnable {
             OrderedPair rightCell = new OrderedPair(point.x + 1, point.y);
 
             /* Push next move onto the stack */
-            if (!thisMaze.topWall(point) && !thisMaze.marked(upCell)) {
+            if (!maze.topWall(point) && !maze.marked(upCell)) {
                 solveStack.push(upCell);
-            } else if (!thisMaze.leftWall(rightCell)
-                       && !thisMaze.marked(rightCell)) {
+            } else if (!maze.leftWall(rightCell)
+                       && !maze.marked(rightCell)) {
                 solveStack.push(rightCell);
-            } else if (!thisMaze.topWall(downCell)
-                       && !thisMaze.marked(downCell)) {
+            } else if (!maze.topWall(downCell)
+                       && !maze.marked(downCell)) {
                 solveStack.push(downCell);
-            } else if (!thisMaze.leftWall(point)
-                       && !thisMaze.marked(leftCell)) {
+            } else if (!maze.leftWall(point)
+                       && !maze.marked(leftCell)) {
                 solveStack.push(leftCell);
             } else {
-                thisMaze.markError(point);
+                maze.markError(point);
                 thisDisplay.repaint();
                 solveStack.pop();
             }

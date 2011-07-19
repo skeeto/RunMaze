@@ -6,6 +6,8 @@
   <property name="dist.dir" value="dist"/>
   <property name="applet.html" value="applet.html"/>
 
+  <taskdef resource="checkstyletask.properties"/>
+
   <target name="init">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${dist.dir}"/>
@@ -34,6 +36,12 @@
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete file="${jar.file}"/>
+  </target>
+
+  <target name="check">
+    <checkstyle config="checkstyle.xml">
+      <fileset dir="src" includes="**/*.java"/>
+    </checkstyle>
   </target>
 
   <target name="format" description="Run the indenter on all source files.">

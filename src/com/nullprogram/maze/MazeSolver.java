@@ -18,8 +18,8 @@ class MazeSolver implements Runnable {
         = new CopyOnWriteArrayList<SolverListener>();
 
     /* Solution variables */
-    private Deque<OrderedPair> solveStack = new ArrayDeque<OrderedPair>();
-    private OrderedPair mazeEnd;
+    private Deque<Position> solveStack = new ArrayDeque<Position>();
+    private Position mazeEnd;
 
     /**
      * Creates a new solver for the given maze.
@@ -29,9 +29,9 @@ class MazeSolver implements Runnable {
     public MazeSolver(final Maze puzzle, final int sleep) {
         maze = puzzle;
         sleepTime = sleep;
-        mazeEnd = new OrderedPair(maze.getWidth() - 1,
+        mazeEnd = new Position(maze.getWidth() - 1,
                                   maze.getHeight() - 1);
-        solveStack.push(new OrderedPair(0, 0));
+        solveStack.push(new Position(0, 0));
         start();
     }
 
@@ -54,7 +54,7 @@ class MazeSolver implements Runnable {
 
     @Override
     public void run() {
-        OrderedPair point;
+        Position point;
 
         /* Solve one step of the maze, sleep, check for halt, repeat */
         do {
@@ -64,10 +64,12 @@ class MazeSolver implements Runnable {
             maze.markSolution(point);
 
             /* Decide which directon to go next */
-            OrderedPair upCell    = new OrderedPair(point.x, point.y - 1);
-            OrderedPair downCell  = new OrderedPair(point.x, point.y + 1);
-            OrderedPair leftCell  = new OrderedPair(point.x - 1, point.y);
-            OrderedPair rightCell = new OrderedPair(point.x + 1, point.y);
+            int x = point.getX();
+            int y = point.getY();
+            Position upCell = new Position(x, y - 1);
+            Position downCell = new Position(x, y + 1);
+            Position leftCell = new Position(x - 1, y);
+            Position rightCell = new Position(x + 1, y);
 
             /* Push next move onto the stack */
             if (!maze.topWall(point) && !maze.marked(upCell)) {

@@ -41,7 +41,7 @@ class MazeDisplay extends JPanel implements SolverListener {
         g.drawLine(width, 0, width, height);
         for (int i = 0; i < maze.getWidth(); i++) {
             for (int j = 0; j < maze.getHeight(); j++) {
-                drawCell(new OrderedPair(i, j), g);
+                drawCell(new Position(i, j), g);
             }
         }
     }
@@ -51,8 +51,8 @@ class MazeDisplay extends JPanel implements SolverListener {
      * @param point the position to be filled
      * @param g the Graphics object to be painted on
      */
-    private void fillCell(final OrderedPair point, final Graphics g) {
-        g.fillRect(point.x * scale, point.y * scale,
+    private void fillCell(final Position point, final Graphics g) {
+        g.fillRect(point.getX() * scale, point.getY() * scale,
                    scale, scale);
     }
 
@@ -61,7 +61,7 @@ class MazeDisplay extends JPanel implements SolverListener {
      * @param point the position of the cell to be drawn
      * @param g the Graphics to be painted to
      */
-    private void drawCell(final OrderedPair point, final Graphics g) {
+    private void drawCell(final Position point, final Graphics g) {
         if (maze.isSolution(point)) {
             g.setColor(SOLUTION);
             fillCell(point, g);
@@ -71,8 +71,8 @@ class MazeDisplay extends JPanel implements SolverListener {
             fillCell(point, g);
         }
 
-        int x = point.x;
-        int y = point.y;
+        int x = point.getX();
+        int y = point.getY();
         g.setColor(WALL);
         if (maze.leftWall(point)) {
             g.drawLine(x * scale, y * scale,

@@ -177,8 +177,8 @@ public class Maze {
      */
     public final boolean marked(final Position point) {
         return !inBounds(point)
-            || data[point.getX()][point.getY()].isSolution()
-            || data[point.getX()][point.getY()].isError();
+               || data[point.getX()][point.getY()].isSolution()
+               || data[point.getX()][point.getY()].isError();
     }
 
     /**
@@ -188,7 +188,7 @@ public class Maze {
      */
     public final boolean topWall(final Position point) {
         return !inBounds(point)
-            || data[point.getX()][point.getY()].hasTopWall();
+               || data[point.getX()][point.getY()].hasTopWall();
     }
 
     /**
@@ -198,7 +198,7 @@ public class Maze {
      */
     public final boolean leftWall(final Position point) {
         return !inBounds(point)
-            || data[point.getX()][point.getY()].hasLeftWall();
+               || data[point.getX()][point.getY()].hasLeftWall();
     }
 
     /**
@@ -209,7 +209,7 @@ public class Maze {
      */
     private boolean inBounds(final Position point) {
         return (point.getX() >= 0) && (point.getY() >= 0)
-            && (point.getX() < width) && (point.getY() < height);
+               && (point.getX() < width) && (point.getY() < height);
     }
 
     /**

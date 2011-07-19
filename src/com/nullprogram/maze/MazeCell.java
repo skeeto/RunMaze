@@ -82,7 +82,7 @@ class MazeCell {
      * Remove this cell's right wall.
      */
     public final void breakTop() {
-         top = false;
+        top = false;
     }
 
     /**

@@ -15,7 +15,7 @@ class MazeSolver implements Runnable {
 
     private volatile boolean enabled;
     private Collection<SolverListener> listeners
-        = new CopyOnWriteArrayList<SolverListener>();
+    = new CopyOnWriteArrayList<SolverListener>();
 
     /* Solution variables */
     private Deque<Position> solveStack = new ArrayDeque<Position>();
@@ -30,7 +30,7 @@ class MazeSolver implements Runnable {
         maze = puzzle;
         sleepTime = sleep;
         mazeEnd = new Position(maze.getWidth() - 1,
-                                  maze.getHeight() - 1);
+                               maze.getHeight() - 1);
         solveStack.push(new Position(0, 0));
         start();
     }

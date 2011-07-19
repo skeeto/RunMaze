@@ -1,8 +1,10 @@
 package com.nullprogram.maze;
 
-import java.util.Stack;
-import java.util.Vector;
+import java.util.List;
+import java.util.Deque;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.ArrayDeque;
 
 /**
  * A single randomly-generated maze. The maze is generated at
@@ -35,8 +37,8 @@ public class Maze {
      * Generate this maze. This should only be called once.
      */
     private void generate() {
-        Stack<Position>  genStack  = new Stack<Position>();
-        Vector<Position> freeCells = new Vector<Position>();
+        Deque<Position> genStack  = new ArrayDeque<Position>();
+        List<Position> freeCells = new ArrayList<Position>();
         Position point;
         Random      randomGen = new Random();
         Position nextCell;
@@ -45,7 +47,7 @@ public class Maze {
         /* Push on the starting location. */
         genStack.push(new Position(0, 0));
 
-        while (!genStack.empty()) {
+        while (!genStack.isEmpty()) {
             point = genStack.peek();
 
             int x = point.getX();
@@ -75,7 +77,7 @@ public class Maze {
                 genStack.pop();
             } else {
                 nextCellIndex = randomGen.nextInt(freeCells.size());
-                nextCell = freeCells.elementAt(nextCellIndex);
+                nextCell = freeCells.get(nextCellIndex);
 
                 /* Mark as used. */
                 markCellUsed(nextCell);

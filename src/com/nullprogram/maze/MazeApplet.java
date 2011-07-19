@@ -4,17 +4,26 @@ import java.awt.Dimension;
 
 import javax.swing.JApplet;
 
+/**
+ * Runs the maze animation as an applet.
+ */
 public class MazeApplet extends JApplet implements SolveListener {
 
     private static final long serialVersionUID = 7742407602430714892L;
 
-    private int cellSize = 15;
-    private int speed    = 10;
+    /* Defaults */
+    private static final int CELL_SIZE = 15;
+    private static final int SPEED = 10;
+    private static final int RESTART_DELAY = 3000;
+
+    private int cellSize = CELL_SIZE;
+    private int speed = SPEED;
     private Maze maze;
     private MazeDisplay display;
     private MazeSolve solution;
 
-    public void init() {
+    @Override
+    public final void init() {
         String paramSize = getParameter("cellsize");
         if (paramSize != null) {
             cellSize = Integer.parseInt(paramSize);
@@ -32,21 +41,25 @@ public class MazeApplet extends JApplet implements SolveListener {
         solution.addListener(this);
     }
 
-    public void start() {
+    @Override
+    public final void start() {
         solution.start();
     }
 
-    public void stop() {
+    @Override
+    public final void stop() {
         solution.stop();
     }
 
-    public void destroy() {
+    @Override
+    public final void destroy() {
         stop();
     }
 
-    public void solveDone() {
+    @Override
+    public final void solveDone() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(RESTART_DELAY);
         } catch (InterruptedException e) {
             return;
         }

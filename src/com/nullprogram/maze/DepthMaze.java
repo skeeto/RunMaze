@@ -1,22 +1,24 @@
 package com.nullprogram.maze;
 
-import java.util.Collections;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.awt.Point;
 import java.util.List;
 import java.util.Deque;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.NoSuchElementException;
+
+import java.awt.Point;
 
 /**
  * A single randomly-generated maze. The maze is generated at
  * construction time.
  */
 public class DepthMaze implements Maze {
+
+    private static final int NDIRECTIONS = 4;
 
     private static final Mark VISITED = Mark.get("visited");
 
@@ -27,9 +29,9 @@ public class DepthMaze implements Maze {
 
     /**
      * Generate a new maze with the given properties.
-     * @param mazeWidth   width of the new maze
-     * @param mazeHeight  height of the new maze
-     * @param scale  height of the new maze
+     * @param cellWidth  width of the new maze
+     * @param cellHeight  height of the new maze
+     * @param cellScale  scale of this maze
      */
     public DepthMaze(final int cellWidth, final int cellHeight,
                      final int cellScale) {
@@ -80,8 +82,12 @@ public class DepthMaze implements Maze {
         }
     }
 
+    /**
+     * A randomly-sorted set of directions to go.
+     * @return a randomly-sorted queue of directions
+     */
     private Queue<Point> getDirections() {
-        List<Point> dirs = new ArrayList<Point>(4);
+        List<Point> dirs = new ArrayList<Point>(NDIRECTIONS);
         dirs.add(new Point(1, 0));
         dirs.add(new Point(-1, 0));
         dirs.add(new Point(0, 1));
@@ -90,7 +96,12 @@ public class DepthMaze implements Maze {
         return new ArrayDeque<Point>(dirs);
     }
 
-    private DepthCell get(Point p) {
+    /**
+     * Return the cell at the given position.
+     * @param p  position of the cell
+     * @return the cell at the given position
+     */
+    private DepthCell get(final Point p) {
         if (inBounds(p.x, p.y)) {
             return data[p.x][p.y];
         } else {
@@ -101,11 +112,12 @@ public class DepthMaze implements Maze {
     /**
      * Return true if the given position is within the bounds of the
      * maze.
-     * @param point the point to be tested
+     * @param px X position to be tested
+     * @param py Y position to be tested
      * @return true if position is within the bounds of the maze
      */
-    private boolean inBounds(int x, int y) {
-        return (x >= 0) && (y >= 0) && (x < width) && (y < height);
+    private boolean inBounds(final int px, final int py) {
+        return (px >= 0) && (py >= 0) && (px < width) && (py < height);
     }
 
     @Override
@@ -119,12 +131,12 @@ public class DepthMaze implements Maze {
     }
 
     @Override
-    public Cell start() {
+    public final Cell start() {
         return data[0][0];
     }
 
     @Override
-    public Iterator<Cell> iterator() {
+    public final Iterator<Cell> iterator() {
         return new DepthMazeIterator();
     }
 

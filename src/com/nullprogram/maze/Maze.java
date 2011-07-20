@@ -1,7 +1,15 @@
 package com.nullprogram.maze;
 
-import java.lang.Iterable;
-
+/**
+ * A generic maze of unknown shape and properties. Cells are connected
+ * together, describing the path of the maze. This cell network should
+ * be created by the maze constructor, and the initial cell returned
+ * with start().
+ *
+ * Iteration is provided for display purposes, to iterate over every
+ * cell in the maze -- ordering being regardless of the cell's
+ * connectedness.
+ */
 public interface Maze extends Iterable<Cell> {
 
     /**

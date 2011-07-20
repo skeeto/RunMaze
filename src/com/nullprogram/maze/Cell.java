@@ -6,11 +6,18 @@ import java.util.Collection;
 
 import java.awt.Shape;
 
+/**
+ * The smallest unit of a maze, representing a branching position. A
+ * cell knows its visual representation and its connecting cells.
+ */
 public abstract class Cell {
 
+    private static final int INIT_MARKS = 4;
+
+    /** Marks that this cell is the end of the maze. */
     public static final Mark END = Mark.get("end");
 
-    private Set<Mark> marks = new HashSet<Mark>(4);
+    private Set<Mark> marks = new HashSet<Mark>(INIT_MARKS);
 
     /**
      * Returns a Shape that describes a cell.

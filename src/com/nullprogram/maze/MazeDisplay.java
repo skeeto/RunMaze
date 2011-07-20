@@ -1,9 +1,9 @@
 package com.nullprogram.maze;
 
-import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -23,7 +23,6 @@ class MazeDisplay extends JPanel implements SolverListener {
     /**
      * Display the given maze at the given size.
      * @param view  the maze to be displayed
-     * @param unitSize  the pixel size of each cell in the maze
      */
     public MazeDisplay(final Maze view) {
         super();

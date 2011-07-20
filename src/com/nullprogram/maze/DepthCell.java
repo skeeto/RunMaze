@@ -1,14 +1,17 @@
 package com.nullprogram.maze;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import java.awt.Shape;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 
+/**
+ * Cell implementation for a standard rectangular maze. This was
+ * particularly written for a depth-first generated maze.
+ */
 public class DepthCell extends Cell {
 
     private final Shape shape;
@@ -20,7 +23,13 @@ public class DepthCell extends Cell {
     private boolean left = true;
     private boolean top = true;
 
-    public DepthCell(int posX, int posY, int scale) {
+    /**
+     * Create a new cell at the given maze position at the given scale.
+     * @param posX  maze's X position of this cell
+     * @param posY  maze's Y position of this cell
+     * @param scale  scale of the owning maze
+     */
+    public DepthCell(final int posX, final int posY, final int scale) {
         x = posX;
         y = posY;
         size = scale;
@@ -53,7 +62,11 @@ public class DepthCell extends Cell {
         return new ArrayList<Cell>(neighbors);
     }
 
-    void addNeighbor(DepthCell cell) {
+    /**
+     * Add a connecting cell to this cell.
+     * @param cell  a new cell connection
+     */
+    final void addNeighbor(final DepthCell cell) {
         if (cell.x < x) {
             left = false;
         } else if (cell.y < y) {

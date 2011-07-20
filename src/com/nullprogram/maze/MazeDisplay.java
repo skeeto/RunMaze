@@ -37,6 +37,9 @@ class MazeDisplay extends JPanel implements SolverListener {
     public void paintComponent(final Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D g = (Graphics2D) graphics;
+        double scaleX = getWidth() * 1.0 / maze.getWidth();
+        double scaleY = getHeight() * 1.0 / maze.getHeight();
+        g.scale(scaleX, scaleY);
         g.setStroke(WALL_STROKE);
         for (Cell cell : maze) {
             if (cell.hasMark(MazeSolver.ERROR_MARK)) {

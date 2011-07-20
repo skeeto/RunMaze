@@ -28,6 +28,10 @@ public class MazeApplet extends JApplet implements SolverListener {
         if (paramSize != null) {
             cellSize = Integer.parseInt(paramSize);
         }
+        String paramSpeed = getParameter("speed");
+        if (paramSpeed != null) {
+            speed = Integer.parseInt(paramSpeed);
+        }
         Dimension size = getSize();
         maze = new DepthMaze((int) (size.getWidth() / cellSize),
                              (int) (size.getHeight() / cellSize),

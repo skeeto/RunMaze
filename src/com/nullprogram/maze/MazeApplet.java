@@ -66,6 +66,7 @@ public class MazeApplet extends JApplet implements SolverListener {
             return;
         }
         init();
+        start();
     }
 
     @Override

@@ -10,16 +10,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 class MazeSolver implements Runnable {
 
+    public static final Mark ERROR_MARK = Mark.get("error");
+    public static final Mark SOLUTION_MARK = Mark.get("solution");
+
     private final Maze maze;
     private final int sleepTime;
 
     private volatile boolean enabled;
     private Collection<SolverListener> listeners
     = new CopyOnWriteArrayList<SolverListener>();
-
-    /* Solution variables */
-    private Deque<Position> solveStack = new ArrayDeque<Position>();
-    private Position mazeEnd;
 
     /**
      * Creates a new solver for the given maze.
@@ -29,20 +28,14 @@ class MazeSolver implements Runnable {
     public MazeSolver(final Maze puzzle, final int sleep) {
         maze = puzzle;
         sleepTime = sleep;
-        mazeEnd = new Position(maze.getWidth() - 1,
-                               maze.getHeight() - 1);
-        solveStack.push(new Position(0, 0));
-        start();
+        (new Thread(this)).start();
     }
 
     /**
      * Start the solver thread.
      */
     public void start() {
-        if (!enabled) {
-            enabled = true;
-            (new Thread(this)).start();
-        }
+        enabled = true;
     }
 
     /**
@@ -54,58 +47,42 @@ class MazeSolver implements Runnable {
 
     @Override
     public void run() {
-        Position point;
+        Deque<Cell> stack = new ArrayDeque<Cell>();
+        stack.push(maze.start());
+        stack.peek().mark(SOLUTION_MARK);
 
-        /* Solve one step of the maze, sleep, check for halt, repeat */
-        do {
-            point = solveStack.peek();
-
-            /* Mark the current point location */
-            maze.markSolution(point);
-
-            /* Decide which directon to go next */
-            int x = point.getX();
-            int y = point.getY();
-            Position upCell = new Position(x, y - 1);
-            Position downCell = new Position(x, y + 1);
-            Position leftCell = new Position(x - 1, y);
-            Position rightCell = new Position(x + 1, y);
-
-            /* Push next move onto the stack */
-            if (!maze.topWall(point) && !maze.marked(upCell)) {
-                solveStack.push(upCell);
-            } else if (!maze.leftWall(rightCell)
-                       && !maze.marked(rightCell)) {
-                solveStack.push(rightCell);
-            } else if (!maze.topWall(downCell)
-                       && !maze.marked(downCell)) {
-                solveStack.push(downCell);
-            } else if (!maze.leftWall(point)
-                       && !maze.marked(leftCell)) {
-                solveStack.push(leftCell);
-            } else {
-                maze.markError(point);
-                solveStack.pop();
-            }
-
-            for (SolverListener listener : listeners) {
-                listener.solveStep();
-            }
-
-            /* Wait for some time time */
+        while (!stack.peek().hasMark(Cell.END)) {
             try {
                 Thread.sleep(sleepTime);
             } catch (Exception e) {
                 return;
             }
-
-            /* If next point location is the end, we are done. */
-        } while (enabled && !point.equals(mazeEnd));
-
-        if (point.equals(mazeEnd)) {
-            for (SolverListener listener : listeners) {
-                listener.solveDone();
+            if (!enabled) {
+                continue;
             }
+
+            Cell current = stack.peek();
+            Collection<Cell> dirs = current.neighbors();
+
+            boolean found = false;
+            for (Cell next : dirs) {
+                if (next.hasMark(ERROR_MARK) || next.hasMark(SOLUTION_MARK)) {
+                    continue;
+                }
+                stack.push(next);
+                next.mark(SOLUTION_MARK);
+                found = true;
+                break;
+            }
+            if (!found) {
+                stack.pop().mark(ERROR_MARK);
+            }
+            for (SolverListener listener : listeners) {
+                listener.solveStep();
+            }
+        }
+        for (SolverListener listener : listeners) {
+            listener.solveDone();
         }
     }
 

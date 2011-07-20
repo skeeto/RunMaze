@@ -29,10 +29,11 @@ public class MazeApplet extends JApplet implements SolverListener {
             cellSize = Integer.parseInt(paramSize);
         }
         Dimension size = getSize();
-        maze = new Maze((int) (size.getWidth() / cellSize),
-                        (int) (size.getHeight() / cellSize));
+        maze = new DepthMaze((int) (size.getWidth() / cellSize),
+                             (int) (size.getHeight() / cellSize),
+                             cellSize);
         if (display == null) {
-            display = new MazeDisplay(maze, cellSize);
+            display = new MazeDisplay(maze);
             add(display);
         } else {
             display.setMaze(maze);

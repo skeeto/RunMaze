@@ -1,5 +1,6 @@
 package com.nullprogram.maze;
 
+import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
@@ -18,69 +19,31 @@ class MazeDisplay extends JPanel implements SolverListener {
     private static final Color WALL = Color.BLACK;
 
     private Maze maze;
-    private int scale;
-
-    private int width;
-    private int height;
 
     /**
      * Display the given maze at the given size.
      * @param view  the maze to be displayed
      * @param unitSize  the pixel size of each cell in the maze
      */
-    public MazeDisplay(final Maze view, final int unitSize) {
+    public MazeDisplay(final Maze view) {
         super();
-        scale = unitSize;
         setMaze(view);
     }
 
     @Override
-    public void paintComponent(final Graphics g) {
-        super.paintComponent(g);
-        g.drawLine(0, height, width, height);
-        g.drawLine(width, 0, width, height);
-        for (int i = 0; i < maze.getWidth(); i++) {
-            for (int j = 0; j < maze.getHeight(); j++) {
-                drawCell(new Position(i, j), g);
+    public void paintComponent(final Graphics graphics) {
+        super.paintComponent(graphics);
+        Graphics2D g = (Graphics2D) graphics;
+        for (Cell cell : maze) {
+            if (cell.hasMark(MazeSolver.ERROR_MARK)) {
+                g.setColor(ERROR);
+                g.fill(cell.getShape());
+            } else if (cell.hasMark(MazeSolver.SOLUTION_MARK)) {
+                g.setColor(SOLUTION);
+                g.fill(cell.getShape());
             }
-        }
-    }
-
-    /**
-     * Fills the given position with the current color.
-     * @param point the position to be filled
-     * @param g the Graphics object to be painted on
-     */
-    private void fillCell(final Position point, final Graphics g) {
-        g.fillRect(point.getX() * scale, point.getY() * scale,
-                   scale, scale);
-    }
-
-    /**
-     * Draw a single cell to the display.
-     * @param point the position of the cell to be drawn
-     * @param g the Graphics to be painted to
-     */
-    private void drawCell(final Position point, final Graphics g) {
-        if (maze.isSolution(point)) {
-            g.setColor(SOLUTION);
-            fillCell(point, g);
-        }
-        if (maze.isError(point)) {
-            g.setColor(ERROR);
-            fillCell(point, g);
-        }
-
-        int x = point.getX();
-        int y = point.getY();
-        g.setColor(WALL);
-        if (maze.leftWall(point)) {
-            g.drawLine(x * scale, y * scale,
-                       x * scale, (y + 1) * scale);
-        }
-        if (maze.topWall(point)) {
-            g.drawLine(x * scale, y * scale,
-                       (x + 1) * scale, y * scale);
+            g.setColor(WALL);
+            g.draw(cell.getWalls());
         }
     }
 
@@ -90,9 +53,7 @@ class MazeDisplay extends JPanel implements SolverListener {
      */
     public void setMaze(final Maze view) {
         maze = view;
-        width = maze.getWidth() * scale;
-        height = maze.getHeight() * scale;
-        Dimension size = new Dimension(width, height);
+        Dimension size = new Dimension(maze.getWidth(), maze.getHeight());
         setMinimumSize(size);
         setPreferredSize(size);
         repaint();

@@ -7,7 +7,7 @@ import javax.swing.JFrame;
  */
 public final class RunMaze {
 
-    private static final int WIDTH = 60;
+    private static final int WIDTH = 40;
     private static final int HEIGHT = 40;
     private static final int SCALE = 15;
     private static final int SPEED = 10;
@@ -54,20 +54,18 @@ public final class RunMaze {
             }
         }
 
-        /* Create a new maze */
-        Maze newMaze = new Maze(width, height);
-
-        /* Create a frame and a maze display */
-        JFrame mazeFrame = new JFrame("Maze");
-        MazeDisplay mazeDraw = new MazeDisplay(newMaze, scale);
-        mazeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mazeFrame.add(mazeDraw);
-        mazeFrame.pack();
-        mazeFrame.setResizable(false);
-        mazeFrame.setVisible(true);
+        Maze maze = new DepthMaze(width, height, scale);
+        JFrame frame = new JFrame("Maze");
+        MazeDisplay display = new MazeDisplay(maze);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(display);
+        frame.pack();
+        frame.setResizable(false);
+        frame.setVisible(true);
 
         /* Now solve the maze */
-        MazeSolver solution = new MazeSolver(newMaze, speed);
-        solution.addListener(mazeDraw);
+        MazeSolver solver = new MazeSolver(maze, speed);
+        solver.addListener(display);
+        solver.start();
     }
 }

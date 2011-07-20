@@ -1,9 +1,11 @@
 package com.nullprogram.maze;
 
 import java.awt.Color;
+import java.awt.Stroke;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 
 import javax.swing.JPanel;
 
@@ -12,6 +14,8 @@ import javax.swing.JPanel;
  */
 class MazeDisplay extends JPanel implements SolverListener {
     private static final long serialVersionUID = 1L;
+
+    private static final Stroke WALL_STROKE = new BasicStroke(1);
 
     /* Color scheme. */
     private static final Color SOLUTION = Color.GREEN;
@@ -33,6 +37,7 @@ class MazeDisplay extends JPanel implements SolverListener {
     public void paintComponent(final Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D g = (Graphics2D) graphics;
+        g.setStroke(WALL_STROKE);
         for (Cell cell : maze) {
             if (cell.hasMark(MazeSolver.ERROR_MARK)) {
                 g.setColor(ERROR);
